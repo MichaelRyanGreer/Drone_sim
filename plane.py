@@ -43,13 +43,19 @@ class Plane:
         self.position		= np.array(position)
         self.position_dot	= np.array(position_dot)
 
+        self.gen_rot()
+
     def getX(self):
 
         return self.attitude, self.attitude_dot, self.position, self.position_dot
 
+    def getRot(self):
+
+        return self.rot_mat
+
     def getPoints(self):
 
-        self.gen_rot()
+        #self.gen_rot()
 
         offset = np.transpose(np.tile(self.position, (len(self.base_points[0]), 1)))
 
@@ -60,12 +66,8 @@ class Plane:
 
     def physics_step(self, t_step=0.1):
 
-        # Generate current rotation matrix
-        self.gen_rot()
-
         # Position step
-        #F = self.getForces()
-        F = np.array([0,0,0])
+        F = self.getForces()
 
         dx = self.position_dot * t_step
 
@@ -80,11 +82,11 @@ class Plane:
         # Rotation step
         T = self.getTorques()
 
-        dt = self.attitude_dot * t_step
+        dt = np.cross(self.attitude_dot,self.rot_mat) * t_step
 
         dw = (T/self.inertia)*t_step
 
-        self.attitude = self.attitude + dt
+        self.rot_mat = self.rot_mat + dt
 
         self.attitude_dot = self.attitude_dot + dw
 

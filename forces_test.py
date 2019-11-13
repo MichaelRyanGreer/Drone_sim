@@ -13,8 +13,8 @@ matplotlib.interactive(True)
 pi = math.radians(180)
 
 # state
-a       = [0,0,pi/4]
-adot    = [0,1,1]
+a       = [0,pi/2,0]
+adot    = [1,1,1]
 p       = [0,0,10]
 pdot    = [0,0,0]
 
@@ -59,7 +59,7 @@ while(1):
 
     a, adot, p, pdot = myplane.getX()
 
-    rot_axis = adot + p
+    rot_axis = np.dot(myplane.getRot(), np.transpose(adot)) + p
 
     axis = ax.scatter(rot_axis[0],rot_axis[1],rot_axis[2],color='g')
 
