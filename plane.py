@@ -68,6 +68,9 @@ class Plane:
 
         # Position step
         F = self.getForces()
+        
+        # This line disables forces
+        #F = np.array([0,0,0])
 
         dx = self.position_dot * t_step
 
